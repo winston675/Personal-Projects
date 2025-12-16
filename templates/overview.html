@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Overview — {{ day_name }} ({{ today }})</h2>
+  <form class="d-flex" method="get">
+    <select name="owner" class="form-select" onchange="this.form.submit()">
+      {% for owner in owners %}
+        <option value="{{ owner }}" {% if owner==owner_filter %}selected{% endif %}>{{ owner }}</option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card shadow-sm h-100">
+      <div class="card-header bg-primary text-white">Today's Execution</div>
+      <div class="card-body">
+        {% if tasks %}
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr><th>Task</th><th>Time Block</th><th>Owner</th><th>Status</th><th>Notes</th></tr>
+              </thead>
+              <tbody>
+                {% for task in tasks %}
+                  <tr class="status-row status-{{ status_colors.get(task.status, 'secondary') }}">
+                    <td><strong>{{ task.data['title'] }}</strong><div class="text-muted small">{{ task.data['description'] }}</div></td>
+                    <td>{{ task.data['time_block'] }}</td>
+                    <td>{{ task.data['owner'] }}</td>
+                    <td><span class="badge bg-{{ status_colors.get(task.status, 'secondary') }}">{{ task.status.replace('_',' ').title() }}</span></td>
+                    <td>{{ task.notes or '—' }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">No tasks found for {{ day_name }}.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-danger text-white">Red Flags</div>
+      <div class="card-body">
+        <p class="text-muted small">Manual placeholders for now. Fields are not persisted.</p>
+        <div class="mb-3">
+          <label class="form-label">Cases &gt;24h without next step</label>
+          <textarea class="form-control" rows="2" placeholder="List cases and owners">{{ red_flags.cases }}</textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Documentation lag &gt;48h</label>
+          <textarea class="form-control" rows="2" placeholder="List docs backlog">{{ red_flags.documentation }}</textarea>
+        </div>
+        <div class="mb-0">
+          <label class="form-label">SLA breaches</label>
+          <textarea class="form-control" rows="2" placeholder="List SLAs and actions">{{ red_flags.sla }}</textarea>
+        </div>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-header bg-warning">Overdue Alerts</div>
+      <div class="card-body">
+        {% if overdue_tasks %}
+          <ul class="list-group list-group-flush">
+            {% for task in overdue_tasks %}
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="fw-semibold">{{ task.data['title'] }}</div>
+                  <div class="text-muted small">{{ task.data['time_block'] }} • {{ task.data['owner'] }}</div>
+                </div>
+                <span class="badge bg-danger">Overdue</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted mb-0">All clear.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

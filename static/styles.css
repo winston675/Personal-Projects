@@ -1,0 +1,35 @@
+body {
+  background: #f5f7fb;
+}
+.navbar-brand {
+  letter-spacing: 0.5px;
+}
+.card {
+  border: none;
+  border-radius: 12px;
+}
+.card-header {
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+}
+.status-row.status-success, .status-success {
+  border-left: 4px solid #198754;
+  background: #f2fbf6;
+}
+.status-row.status-warning, .status-warning {
+  border-left: 4px solid #ffc107;
+  background: #fff9e6;
+}
+.status-row.status-danger, .status-danger {
+  border-left: 4px solid #dc3545;
+  background: #fff1f3;
+}
+.status-row.status-info, .status-info {
+  border-left: 4px solid #0dcaf0;
+  background: #f1fbff;
+}
+.status-row.status-secondary, .status-secondary {
+  border-left: 4px solid #6c757d;
+  background: #f7f7f7;
+}
+textarea { resize: vertical; }
